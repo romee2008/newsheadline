@@ -20,6 +20,23 @@ client = tweepy.Client(consumer_key=consumer_key1,
 
 
 
+import tweepy
+import requests
+import time
+from os import environ
+from bs4 import BeautifulSoup
+import os
+
+# Twitter API Credentials
+consumer_key1 = environ['CONSUMER_KEY']
+consumer_secret_key1 = environ['CONSUMER_SECRET_KEY']
+access_token1 = environ['ACCESS_TOKEN']
+access_token_secret1 = environ['ACCESS_TOKEN_SECRET']
+
+client = tweepy.Client(consumer_key=consumer_key1,
+                        consumer_secret=consumer_secret_key1,
+                        access_token=access_token1,
+                        access_token_secret=access_token_secret1)
 
 # Load the unique counter from a file
 def load_unique_counter(filename='unique_counter.txt'):
@@ -32,8 +49,12 @@ def load_unique_counter(filename='unique_counter.txt'):
 
 # Save the unique counter to a file
 def save_unique_counter(counter, filename='unique_counter.txt'):
-    with open(filename, 'w') as file:
-        file.write(str(counter))
+    try:
+        with open(filename, 'w') as file:
+            file.write(str(counter))
+        print(f"Saved unique counter: {counter}")
+    except Exception as e:
+        print(f"Error saving unique counter: {e}")
 
 # Fetch BBC News Headlines
 def fetch_bbc_headlines():
@@ -46,7 +67,7 @@ def fetch_bbc_headlines():
     
     # Extract headlines (This might vary based on the page structure)
     headlines = [headline.text.strip() for headline in soup.find_all('h3')]  # Adjust selector as per the structure
-    return list(dict.fromkeys(headlines))[:1]  # Remove duplicates, take top 20
+    return list(dict.fromkeys(headlines))[:20]  # Remove duplicates, take top 20
 
 # Function to tweet headlines
 def tweet_headlines():
@@ -80,7 +101,7 @@ def tweet_headlines():
     if tweet_text.strip():
         try:
             client.create_tweet(text=tweet_text)
-            print('tweeted')
+            print(f'Tweeted: {tweet_text}')
         except tweepy.TweepyException as e:
             print(f'Error: {e}')
 
@@ -89,8 +110,6 @@ def tweet_headlines():
 
 if __name__ == "__main__":
     tweet_headlines()
-
-
 
 
 
