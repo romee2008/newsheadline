@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 import tweepy
-
+import requests
 import time
 import sys
 from os import environ
