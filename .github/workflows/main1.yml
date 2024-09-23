@@ -20,11 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install tweepy BeautifulSoup request python-dotenv
+          pip install tweepy BeautifulSoup4 requests python-dotenv
 
       - name: Run News Headlines
         run: |
-          python news_headlines.py  # Replace with the name of your script
+          python new_headlines.py  # Replace with the name of your script
         env:
          CONSUMER_KEY: ${{ secrets.consumer_key }}
          CONSUMER_SECRET_KEY : ${{ secrets.consumer_secret_key }}
