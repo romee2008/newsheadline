@@ -67,7 +67,7 @@ def fetch_bbc_headlines():
     
     # Extract headlines (This might vary based on the page structure)
     headlines = [headline.text.strip() for headline in soup.find_all('h3')]  # Adjust selector as per the structure
-    return list(dict.fromkeys(headlines))[:20]  # Remove duplicates, take top 20
+    return list(dict.fromkeys(headlines))[:1]  # Remove duplicates, take top 20
 
 # Function to tweet headlines
 def tweet_headlines():
@@ -86,7 +86,7 @@ def tweet_headlines():
         if len(tweet_text + line) > character_limit:
             try:
                 client.create_tweet(text=tweet_text)
-                print(f'Tweeted: {tweet_text}')
+                print('tweeted')
                 time.sleep(10)  # Wait before next tweet
             except tweepy.TweepyException as e:
                 print(f'Error: {e}')
