@@ -15,7 +15,7 @@ access_token1 = environ['ACCESS_TOKEN']
 access_token_secret1 = environ['ACCESS_TOKEN_SECRET']
 
 client = tweepy.Client(consumer_key=consumer_key1,
-                        consumer_secret=consumer_secret1,
+                        consumer_secret=consumer_secret_key1,
                         access_token=access_token1,
                         access_token_secret=access_token_secret1)
 
