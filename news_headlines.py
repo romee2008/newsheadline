@@ -17,48 +17,92 @@ client = tweepy.Client(consumer_key=consumer_key1,
                         access_token=access_token1,
                         access_token_secret=access_token_secret1)
 
+# Function to load the unique counter from a file
+def load_unique_counter(filename='unique_counter.txt'):
+    if not os.path.exists(filename):
+        return 1  # Start from 1 if the file doesn't exist
+    
+    with open(filename, 'r') as file:
+        return int(file.read().strip())
+
+# Function to save the unique counter to a file
+def save_unique_counter(counter, filename='unique_counter.txt'):
+    with open(filename, 'w') as file:
+        file.write(str(counter))
+
+# Load the counter at the start
+unique_number_counter = load_unique_counter()
+
+# Update the counter after tweeting
+save_unique_counter(unique_number_counter)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# In-memory storage for unique numbers
+tweeted_headlines_numbers = set()
+unique_number_counter = 1
+
+# User-Agent list
+user_agents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36',
+    'Mozilla/5.0 (Linux; Android 10; SM-G950U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Mobile Safari/537.36'
+]
+
 # Fetch BBC News Headlines
 def fetch_bbc_headlines():
     url = 'https://www.forexlive.com'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+    headers = {
+        'User-Agent': random.choice(user_agents),
+        'Referer': 'https://www.google.com',
+        'Accept-Language': 'en-US,en;q=0.9'
+    }
     
-    # Extract headlines (This might vary based on the page structure)
-    headlines = [headline.text.strip() for headline in soup.find_all('h3')]  # Adjust selector as per the structure
-    return list(dict.fromkeys(headlines))[:1]  # Remove duplicates, take top 20
-
-# Load previously tweeted headlines
-def load_tweeted_headlines(filename='tweeted_headlines.txt'):
-    if not os.path.exists(filename):
+    # Random sleep before making the request
+    time.sleep(random.uniform(1, 3))
+    
+    response = requests.get(url, headers=headers)
+    
+    # Check response status
+    if response.status_code != 200:
+        print(f"Failed to fetch: {response.status_code}")
         return []
     
-    with open(filename, 'r', encoding='utf-8') as file:
-        return file.read().splitlines()
-
-# Save a new headline to the log file
-def save_tweeted_headline(headline, filename='tweeted_headlines.txt'):
-    with open(filename, 'a', encoding='utf-8') as file:
-        file.write(f"{headline}\n")
+    soup = BeautifulSoup(response.text, 'html.parser')
+    headlines = [headline.text.strip() for headline in soup.find_all('h3')]
+    return list(dict.fromkeys(headlines))[:1]  # Remove duplicates, take top 20
 
 # Function to tweet headlines
 def tweet_headlines():
+    global unique_number_counter  # Access the global counter
     headlines = fetch_bbc_headlines()
-    tweeted_headlines = load_tweeted_headlines()
-
-    # Filter out headlines that have already been tweeted
-    new_headlines = [headline for headline in headlines if headline not in tweeted_headlines]
-    
-    if not new_headlines:
-        print("No new headlines to tweet.")
-        return
 
     tweet_text = "Financial Summary\n" + time.strftime('%A, %B %d, %Y') + "\n\n"
     character_limit = 280
-    count = 1
     
-    for headline in new_headlines:
-        line = f"{count}. {headline}\n"
+    for headline in headlines:
+        # Use the current unique number and increment for the next headline
+        unique_number = unique_number_counter
         
+        # Check if this unique number has already been used
+        if unique_number in tweeted_headlines_numbers:
+            unique_number_counter += 1  # Increment if already tweeted
+            continue  # Skip to the next headline
+
+        line = f"{unique_number}. {headline}\n"
+
         # If the current tweet exceeds the character limit, tweet it and start a new one
         if len(tweet_text + line) > character_limit:
             try:
@@ -70,22 +114,61 @@ def tweet_headlines():
             
             # Reset tweet text
             tweet_text = "Financial Summary\n" + time.strftime('%A, %B %d, %Y') + "\n\n"
-        
+
         tweet_text += line
-        save_tweeted_headline(headline)  # Save the tweeted headline
-        count += 1
+        tweeted_headlines_numbers.add(unique_number)  # Save the unique number of the tweeted headline
+        unique_number_counter += 1  # Increment the counter for the next tweet
     
     # Tweet any remaining headlines
     if tweet_text.strip():
         try:
             client.create_tweet(text=tweet_text)
-            print("tweeted")
+            print('tweeted')
         except tweepy.TweepyException as e:
             print(f'Error: {e}')
+
+
+# Function to load the unique counter from a file
+def load_unique_counter(filename='unique_counter.txt'):
+    if not os.path.exists(filename):
+        return 1  # Start from 1 if the file doesn't exist
+    
+    with open(filename, 'r') as file:
+        return int(file.read().strip())
+
+# Function to save the unique counter to a file
+def save_unique_counter(counter, filename='unique_counter.txt'):
+    with open(filename, 'w') as file:
+        file.write(str(counter))
+
+# Load the counter at the start
+unique_number_counter = load_unique_counter()
+
+# Update the counter after tweeting
+save_unique_counter(unique_number_counter)
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     tweet_headlines()
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36'
-}
+
+
+
+
+
+
+
+
+
+
