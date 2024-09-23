@@ -27,10 +27,10 @@ consumer_secret_key1 = environ['CONSUMER_SECRET_KEY']
 access_token1 = environ['ACCESS_TOKEN']
 access_token_secret1 = environ['ACCESS_TOKEN_SECRET']
 
-client = tweepy.Client(consumer_key=consumer_key,
-                        consumer_secret=consumer_secret,
-                        access_token=access_token,
-                        access_token_secret=access_token_secret)
+client = tweepy.Client(consumer_key=consumer_key1,
+                        consumer_secret=consumer_secret1,
+                        access_token=access_token1,
+                        access_token_secret=access_token_secret1)
 
 # Fetch BBC News Headlines
 def fetch_bbc_headlines():
