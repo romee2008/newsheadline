@@ -1,0 +1,32 @@
+name: News Headlines
+
+on:
+  schedule:
+    # This cron job runs every day at 18:00 PKT (UTC+5)
+       - cron: '0 */1 * * *' # Convert PKT to UTC (18:00 PKT = 13:00 UTC)
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Specify your desired Python version
+
+      - name: Install dependencies
+        run: |
+          pip install tweepy BeautifulSoup request python-dotenv
+
+      - name: Run News Headlines
+        run: |
+          python news_headlines.py  # Replace with the name of your script
+        env:
+         CONSUMER_KEY: ${{ secrets.consumer_key }}
+         CONSUMER_SECRET_KEY : ${{ secrets.consumer_secret_key }}
+         ACCESS_TOKEN: ${{ secrets.access_token }}
+         ACCESS_TOKEN_SECRET: ${{ secrets.access_token_secret }}
