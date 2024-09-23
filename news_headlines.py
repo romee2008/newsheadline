@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-load_dotenv()
 import tweepy
 import requests
 import time
@@ -81,7 +79,7 @@ def tweet_headlines():
     if tweet_text.strip():
         try:
             client.create_tweet(text=tweet_text)
-            print(f'Tweeted: {tweet_text}')
+            print("tweeted")
         except tweepy.TweepyException as e:
             print(f'Error: {e}')
 
