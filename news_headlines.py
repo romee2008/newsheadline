@@ -25,7 +25,7 @@ def fetch_bbc_headlines():
     
     # Extract headlines (This might vary based on the page structure)
     headlines = [headline.text.strip() for headline in soup.find_all('h3')]  # Adjust selector as per the structure
-    return list(dict.fromkeys(headlines))[:20]  # Remove duplicates, take top 20
+    return list(dict.fromkeys(headlines))[:1]  # Remove duplicates, take top 20
 
 # Load previously tweeted headlines
 def load_tweeted_headlines(filename='tweeted_headlines.txt'):
