@@ -5,6 +5,7 @@ from os import environ
 from bs4 import BeautifulSoup
 from datetime import datetime
 import os
+import sys
 
 consumer_key1 = environ['CONSUMER_KEY']
 consumer_secret_key1 = environ['CONSUMER_SECRET_KEY']
