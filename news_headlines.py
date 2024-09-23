@@ -12,6 +12,14 @@ consumer_secret_key1 = environ['CONSUMER_SECRET_KEY']
 access_token1 = environ['ACCESS_TOKEN']
 access_token_secret1 = environ['ACCESS_TOKEN_SECRET']
 
+client = tweepy.Client(consumer_key=consumer_key1,
+                        consumer_secret=consumer_secret1,
+                        access_token=access_token1,
+                        access_token_secret=access_token_secret1)
+
+
+
+
 
 # Load the unique counter from a file
 def load_unique_counter(filename='unique_counter.txt'):
