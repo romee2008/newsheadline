@@ -1,6 +1,5 @@
 import tweepy
 import requests
-import time
 from os import environ
 from bs4 import BeautifulSoup
 import os
@@ -67,13 +66,10 @@ def tweet_headlines():
             client.create_tweet(text=headline)
             print(f'Tweeted: {headline}')
             previously_tweeted.add(headline)  # Add to tweeted headlines
-            time.sleep(10)  # Wait before next tweet
         except tweepy.TweepyException as e:
             print(f'Error: {e}')
 
     save_tweeted_headlines(previously_tweeted)  # Save updated list of tweeted headlines
 
 if __name__ == "__main__":
-    while True:
-        tweet_headlines()
-        time.sleep(1800)  # Sleep for 30 minutes
+    tweet_headlines()
