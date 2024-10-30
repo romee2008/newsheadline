@@ -2,19 +2,16 @@ name: News Headlines
 
 on:
   schedule:
-    # This cron job runs every day at 18:00 PKT (UTC+5)
-      - cron: '0 0 1 1 *' # Convert PKT to UTC (18:00 PKT = 13:00 UTC)
+    # This cron job runs every day at 13:00 UTC (18:00 PKT)
+    - cron: '0 13 * * *'
   workflow_dispatch: # Allows manual triggering of the workflow
   
-
 jobs:
   tweet:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-     
-      
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -23,24 +20,23 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install tweepy BeautifulSoup4 requests 
+          pip install tweepy beautifulsoup4 requests
+
       - name: Run News Headlines
         run: |
           python news_headlines.py  # Replace with the name of your script
         env:
-         CONSUMER_KEY: ${{ secrets.consumer_key }}
-         CONSUMER_SECRET_KEY : ${{ secrets.consumer_secret_key }}
-         ACCESS_TOKEN: ${{ secrets.access_token }}
-         ACCESS_TOKEN_SECRET: ${{ secrets.access_token_secret }}
+          CONSUMER_KEY: ${{ secrets.consumer_key }}
+          CONSUMER_SECRET_KEY: ${{ secrets.consumer_secret_key }}
+          ACCESS_TOKEN: ${{ secrets.access_token }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.access_token_secret }}
 
-
-
-         # Step 5: Commit and push the updated counter file
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add unique_counter.txt  # This is the file your Python script modifies
-          git commit -m "Update counter"
-          git push origin main
-
+          if [ -f unique_counter.txt ]; then
+            git add unique_counter.txt
+            git commit -m "Update counter"
+            git push origin main
+          fi
