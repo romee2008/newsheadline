@@ -20,13 +20,6 @@ client = tweepy.Client(consumer_key=consumer_key1,
 
 
 
-import tweepy
-import requests
-import time
-from os import environ
-from bs4 import BeautifulSoup
-import os
-
 # Twitter API Credentials
 consumer_key1 = environ['CONSUMER_KEY']
 consumer_secret_key1 = environ['CONSUMER_SECRET_KEY']
@@ -105,15 +98,7 @@ def tweet_headlines():
         except tweepy.TweepyException as e:
             print(f'Error: {e}')
 
-     # Step 5: Commit and push the updated counter file
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add unique_counter.txt  # This is the file your Python script modifies
-          git commit -m "Update counter"
-          git push origin main
-
+     
 if __name__ == "__main__":
     tweet_headlines()
 
