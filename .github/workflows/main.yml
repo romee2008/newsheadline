@@ -39,4 +39,5 @@ jobs:
             git add unique_counter.txt
             git commit -m "Update counter"
             git push origin main
-          
+          fi
+
